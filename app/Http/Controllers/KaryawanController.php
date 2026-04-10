@@ -16,18 +16,18 @@ class KaryawanController extends Controller
 
         $validatedData = $request->validate([
             'nama' => 'required',
-            'posisi' => 'required,'
+            'posisi' => 'required',
         ]);
 
         karyawan::create([
-            'nama' => $validatedData->nama,
-            'posisi' => $validatedData->posisi,
+            'nama' => $validatedData['nama'],
+            'posisi' => $validatedData['posisi'],
         ]);
 
         return redirect('/karyawan');
     }
 
-    public function update($id) {
+    public function update($id, Request $request) {
         $karyawan = karyawan::findOrFail($id);
 
         $request->validate([
