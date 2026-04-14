@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KaryawanController;
+use App\Http\Controllers\GajiController;
 
 Route::get('/', function () {
     return view('welcome');

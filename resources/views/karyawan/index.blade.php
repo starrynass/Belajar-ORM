@@ -3,49 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name', 'Karyawan') }}</title>
+    <title>Data Karyawan & Gaji</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="min-h-screen bg-slate-100 text-slate-800 antialiased">
-    <div class="px-3 py-4">
-        <h2 class="text-xl font-semibold">Data Karyawan</h2>
+<body class="min-h-screen bg-gray-900 relative overflow-hidden">
+
+<!-- Gradient kiri atas -->
+<div class="absolute top-0 left-0 w-[400px] h-[400px] 
+bg-gradient-to-br from-gray-500/10 to-transparent 
+blur-3xl rounded-full"></div>
+
+<!-- Gradient kanan bawah -->
+<div class="absolute bottom-0 right-0 w-[400px] h-[400px] 
+bg-gradient-to-tl from-gray-500/10 to-transparent 
+blur-3xl rounded-full"></div>
+
+<!-- CONTAINER -->
+<div class="max-w-6xl mx-auto py-8 relative z-10">
+
+    <!-- HEADER -->
+    <div class="bg-gray-200/80 backdrop-blur 
+        shadow-[0_6px_25px_rgba(200,200,200,0.15)] 
+        rounded-2xl p-6 mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">
+            Data Karyawan & Gaji
+        </h2>
     </div>
 
-     <!-- Dibawah text Data Karyawan -->
-    <div class="px-3 pb-3">
-        <a href="{{ route('karyawan.tambah') }}" class="text-lg text-blue-600 font-base">Tambah</a>
+    <!-- ACTION -->
+    <div class="flex justify-between items-center mb-4">
+        <a href="{{ route('karyawan.tambah') }}" 
+           class="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-lg 
+           shadow-[0_4px_10px_rgba(200,200,200,0.2)] transition">
+            + Tambah Karyawan
+        </a>
+
+        <form method="GET" class="flex gap-2">
+            <input type="text" name="search" placeholder="Cari nama..."
+                class="border border-gray-300 px-3 py-2 rounded-lg 
+                focus:ring-2 focus:ring-gray-400 outline-none bg-gray-100 text-gray-700">
+            <button class="bg-gray-700 text-white px-4 py-2 rounded-lg 
+                hover:bg-gray-800 shadow-[0_4px_10px_rgba(200,200,200,0.2)] transition">
+                Search
+            </button>
+        </form>
     </div>
 
-    <table class="mx-3 divide-y divide-slate-200 text-sm">
-        <thead class="bg-slate-50">
-            <tr>
-                <th class="px-6 py-3 text-left font-medium text-slate-600">ID</th>
-                <th class="px-6 py-3 text-left font-medium text-slate-600">Nama</th>
-                <th class="px-6 py-3 text-left font-medium text-slate-600">Posisi</th>
-                <th class="px-6 py-3 text-left font-medium text-slate-600">Aksi</th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-100 bg-white">
-            @foreach ($karyawan as $p)
-                <tr class="hover:bg-slate-50">
-                    <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $p->id }}</td>
-                    <td class="whitespace-nowrap px-6 py-4">{{ $p->nama }}</td>
-                    <td class="whitespace-nowrap px-6 py-4">{{ $p->posisi }}</td>
-                    <td class="whitespace-nowrap px-6 py-4 flex gap-5 items-center">
-                         <a href="/karyawan/{{ $p->id }}" class="text-yellow-600">Edit</a>
+    <!-- TABLE -->
+ <div class="bg-gray-200/80 backdrop-blur 
+    shadow-[0_15px_50px_rgba(180,180,180,0.25),_0_5px_20px_rgba(200,200,200,0.2)] 
+    rounded-2xl overflow-hidden transition">
 
-                         <form action="{{ route('karyawan.delete', ['id' => $p->id] )}}" method="POST" class="mx-auto p-6">
+        <table class="w-full text-sm">
+            <thead class="bg-gray-700 text-gray-100">
+                <tr>
+                    <th class="px-6 py-3 text-left">ID</th>
+                    <th class="px-6 py-3 text-left">Nama</th>
+                    <th class="px-6 py-3 text-left">Posisi</th>
+                    <th class="px-6 py-3 text-left">Gaji Pokok</th>
+                    <th class="px-6 py-3 text-left">Bonus</th>
+                    <th class="px-6 py-3 text-left">Total</th>
+                    <th class="px-6 py-3 text-left">Tanggal</th>
+                    <th class="px-6 py-3 text-left">Aksi</th>
+                </tr>
+            </thead>
+
+            <tbody class="divide-y divide-gray-300">
+                @foreach ($gaji as $d)
+                <tr class="hover:bg-gray-300/40 transition">
+                    <td class="px-6 py-4 font-semibold text-gray-700">{{ $d->id }}</td>
+                    <td class="px-6 py-4 text-gray-700">{{ $d->karyawan->nama }}</td>
+                    <td class="px-6 py-4 text-gray-600">{{ $d->karyawan->posisi }}</td>
+                    <td class="px-6 py-4 text-gray-700">Rp {{ number_format($d->gaji_pokok) }}</td>
+                    <td class="px-6 py-4 text-gray-700">Rp {{ number_format($d->bonus) }}</td>
+
+                    <td class="px-6 py-4 font-bold text-gray-900">
+                        Rp {{ number_format($d->gaji_pokok + $d->bonus) }}
+                    </td>
+
+                    <td class="px-6 py-4 text-gray-600">{{ $d->tanggal_gajian }}</td>
+
+                    <!-- AKSI -->
+                    <td class="px-6 py-4 flex gap-3">
+
+                        <a href="/karyawan/{{ $d->karyawan->id }}" 
+                           class="text-gray-700 hover:text-black font-medium transition">
+                            Edit
+                        </a>
+
+                        <form action="{{ route('karyawan.delete', ['id' => $d->karyawan->id]) }}" method="POST">
                             @csrf
-                           <input name="_method" type="hidden" value="DELETE">
-                            <button type="submit" class="text-red-600 cursor-pointer">
+                            @method('DELETE')
+                            <button class="text-gray-500 hover:text-black font-medium transition">
                                 Hapus
                             </button>
-                         </form>
+                        </form>
+
                     </td>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="mt-4 text-gray-200">
+        {{ $gaji->links() }}
+    </div>
+
+</div>
+
 </body>
 </html>

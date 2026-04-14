@@ -1,15 +1,32 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Karyawan;
+use App\Models\Gaji;
 use Illuminate\Http\Request;
 
 class KaryawanController extends Controller
 {
-    public function index() {
+       public function index(Request $request) {
+
+        // 🔹 Data karyawan
         $karyawan = Karyawan::all();
-        return view ('karyawan.index', ['karyawan' => $karyawan]);
+
+        // 🔹 Data gaji + relasi
+        $query = Gaji::with('karyawan');
+
+        // 🔍 Search berdasarkan nama karyawan
+        if ($request->search) {
+            $query->whereHas('karyawan', function ($q) use ($request) {
+                $q->where('nama', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // 📄 Pagination
+        $gaji = $query->paginate(5);
+
+        // 🔥 kirim ke view (2 data)
+        return view('karyawan.index', compact('karyawan', 'gaji'));
     }
 
     public function store(Request $request) {
@@ -17,12 +34,25 @@ class KaryawanController extends Controller
         $validatedData = $request->validate([
             'nama' => 'required',
             'posisi' => 'required',
+             'gaji_pokok' => 'required',
+        'tanggal_gajian' => 'required',
         ]);
 
-        karyawan::create([
-            'nama' => $validatedData['nama'],
-            'posisi' => $validatedData['posisi'],
-        ]);
+    // simpan karyawan (WAJIB pakai variabel)
+    $karyawan = Karyawan::create([
+        'nama' => $request->nama,
+        'posisi' => $request->posisi,
+    ]);
+
+    // lalu simpan gaji (JOIN lewat karyawan_id)
+    Gaji::create([
+        'karyawan_id' => $karyawan->id,
+        'gaji_pokok' => $request->gaji_pokok,
+        'bonus' => $request->bonus ?? 0,
+        'tanggal_gajian' => $request->tanggal_gajian,
+    ]);
+
+    return redirect('/karyawan');
 
         return redirect('/karyawan');
     }
