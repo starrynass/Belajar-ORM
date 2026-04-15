@@ -21,3 +21,7 @@ Project laravel untuk mengelola data karyawan beserta gaji nya dengan Eloquent O
 
 <img width="1919" height="943" alt="Cuplikan layar 2026-04-15 074349" src="https://github.com/user-attachments/assets/f37c4b0a-52eb-40e9-9479-10b54fc6372d" />
 
+# Dibuat Oleh
+Nama : Raden Dinda Nasywatunnisa
+Kelas : XI - RPL 3
+No Absen : 26 
