@@ -57,21 +57,45 @@ class KaryawanController extends Controller
         return redirect('/karyawan');
     }
 
-    public function update($id, Request $request) {
-        $karyawan = karyawan::findOrFail($id);
 
-        $request->validate([
-            'nama' => 'required',
-            'posisi'=> 'required',
+public function update($id, Request $request) {
+    $karyawan = Karyawan::findOrFail($id);
+
+    $request->validate([
+        'nama' => 'required',
+        'posisi'=> 'required',
+        'gaji_pokok' => 'required',
+        'tanggal_gajian' => 'required',
+    ]);
+
+    // UPDATE KARYAWAN
+    $karyawan->update([
+        'nama' => $request->nama,
+        'posisi' => $request->posisi,
+    ]);
+
+    // CARI DATA GAJI BERDASARKAN karyawan_id
+    $gaji = Gaji::where('karyawan_id', $id)->first();
+
+    if ($gaji) {
+        // UPDATE GAJI
+        $gaji->update([
+            'gaji_pokok' => $request->gaji_pokok,
+            'bonus' => $request->bonus,
+            'tanggal_gajian' => $request->tanggal_gajian,
         ]);
-
-        $karyawan->update([
-            'nama' => $request->nama,
-            'posisi' => $request->posisi,
+    } else {
+        // JIKA BELUM ADA → BUAT BARU
+        Gaji::create([
+            'karyawan_id' => $id,
+            'gaji_pokok' => $request->gaji_pokok,
+            'bonus' => $request->bonus,
+            'tanggal_gajian' => $request->tanggal_gajian,
         ]);
-
-        return redirect('/karyawan');
     }
+
+    return redirect('/karyawan')->with('success', 'Data berhasil diupdate');
+}
 
     public function destroy($id) {
         $karyawan = karyawan::findOrFail($id);
@@ -86,6 +110,9 @@ class KaryawanController extends Controller
 
     public function edit($id) {
         $karyawan = karyawan::findOrFail($id);
-        return view('karyawan.edit', ['karyawan' => $karyawan]);
-    }
+
+        $gaji = Gaji::where('karyawan_id', $id)->first();
+
+        return view('karyawan.edit', compact('karyawan', 'gaji'));
+        }
 }
