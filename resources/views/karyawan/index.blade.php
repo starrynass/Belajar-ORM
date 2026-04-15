@@ -9,20 +9,16 @@
 
 <body class="min-h-screen bg-gray-900 relative overflow-hidden">
 
-<!-- Gradient kiri atas -->
 <div class="absolute top-0 left-0 w-[400px] h-[400px] 
 bg-gradient-to-br from-gray-500/10 to-transparent 
 blur-3xl rounded-full"></div>
 
-<!-- Gradient kanan bawah -->
 <div class="absolute bottom-0 right-0 w-[400px] h-[400px] 
 bg-gradient-to-tl from-gray-500/10 to-transparent 
 blur-3xl rounded-full"></div>
 
-<!-- CONTAINER -->
 <div class="max-w-6xl mx-auto py-8 relative z-10">
 
-    <!-- HEADER -->
     <div class="bg-gray-200/80 backdrop-blur 
         shadow-[0_6px_25px_rgba(200,200,200,0.15)] 
         rounded-2xl p-6 mb-6">
@@ -31,7 +27,6 @@ blur-3xl rounded-full"></div>
         </h2>
     </div>
 
-    <!-- ACTION -->
     <div class="flex justify-between items-center mb-4">
         <a href="{{ route('karyawan.tambah') }}" 
            class="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-lg 
@@ -50,7 +45,6 @@ blur-3xl rounded-full"></div>
         </form>
     </div>
 
-    <!-- TABLE -->
  <div class="bg-gray-200/80 backdrop-blur 
     shadow-[0_15px_50px_rgba(180,180,180,0.25),_0_5px_20px_rgba(200,200,200,0.2)] 
     rounded-2xl overflow-hidden transition">
@@ -84,7 +78,6 @@ blur-3xl rounded-full"></div>
 
                     <td class="px-6 py-4 text-gray-600">{{ $d->tanggal_gajian }}</td>
 
-                    <!-- AKSI -->
                     <td class="px-6 py-4 flex gap-3">
 
                         <a href="/karyawan/{{ $d->karyawan->id }}" 
@@ -107,7 +100,6 @@ blur-3xl rounded-full"></div>
         </table>
     </div>
 
-    <!-- PAGINATION -->
     <div class="mt-4 text-gray-200">
         {{ $gaji->links() }}
     </div>

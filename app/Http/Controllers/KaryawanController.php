@@ -9,23 +9,17 @@ class KaryawanController extends Controller
 {
        public function index(Request $request) {
 
-        // 🔹 Data karyawan
         $karyawan = Karyawan::all();
-
-        // 🔹 Data gaji + relasi
         $query = Gaji::with('karyawan');
 
-        // 🔍 Search berdasarkan nama karyawan
         if ($request->search) {
             $query->whereHas('karyawan', function ($q) use ($request) {
                 $q->where('nama', 'like', '%' . $request->search . '%');
             });
         }
 
-        // 📄 Pagination
         $gaji = $query->paginate(5);
 
-        // 🔥 kirim ke view (2 data)
         return view('karyawan.index', compact('karyawan', 'gaji'));
     }
 
@@ -38,13 +32,11 @@ class KaryawanController extends Controller
         'tanggal_gajian' => 'required',
         ]);
 
-    // simpan karyawan (WAJIB pakai variabel)
     $karyawan = Karyawan::create([
         'nama' => $request->nama,
         'posisi' => $request->posisi,
     ]);
 
-    // lalu simpan gaji (JOIN lewat karyawan_id)
     Gaji::create([
         'karyawan_id' => $karyawan->id,
         'gaji_pokok' => $request->gaji_pokok,
@@ -80,14 +72,6 @@ public function update($id, Request $request) {
     if ($gaji) {
         // UPDATE GAJI
         $gaji->update([
-            'gaji_pokok' => $request->gaji_pokok,
-            'bonus' => $request->bonus,
-            'tanggal_gajian' => $request->tanggal_gajian,
-        ]);
-    } else {
-        // JIKA BELUM ADA → BUAT BARU
-        Gaji::create([
-            'karyawan_id' => $id,
             'gaji_pokok' => $request->gaji_pokok,
             'bonus' => $request->bonus,
             'tanggal_gajian' => $request->tanggal_gajian,
