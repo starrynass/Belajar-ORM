@@ -5,7 +5,6 @@ Project laravel untuk mengelola data karyawan beserta gaji nya dengan Eloquent O
 - CRUD Karyawan
 - Relasi Karyawan & Gaji
 - Search data karyawan
-- Pagination ( pindah dan kembali )
 
 # Halaman Data Karyawan beserta Gaji
 <img width="1908" height="938" alt="Cuplikan layar 2026-04-15 073341" src="https://github.com/user-attachments/assets/61933858-583d-44ce-9c8f-b120a7e43c06" />
