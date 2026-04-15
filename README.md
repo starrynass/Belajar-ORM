@@ -1,5 +1,5 @@
 # DATA KARYAWAN & GAJI
-Project laravel untuk mengelola ata karyawan beserta gaji nya dengan Eloquent ORM
+Project laravel untuk mengelola data karyawan beserta gaji nya dengan Eloquent ORM
 
 # Fitur
 - CRUD Karyawan
